@@ -1,0 +1,2 @@
+- [Tips on mastering DSA](https://blog.algomaster.io/p/how-i-mastered-data-structures-and-algorithms)
+- [Understand Algorithmic Complexity](https://blog.algomaster.io/p/57bd4963-462f-4294-a972-4012691fc729)
