@@ -135,15 +135,72 @@ def partition(arr, low, high):
 
 '''
 O(n^2): Quadratic time
+- algorithm that grows quadratically with the input size
+- patterns: nested loops that both depend on input size
+i.e., bubble sort and insertion sort
 '''
+def bubble_sort(lst):
+    n = len(lst)
+    for i in range(n):
+        for j in range(i+1, n):
+            if lst[i] > lst[j]:
+                lst[i], lst[j] = lst[j], lst[i]
+
+def insertion_sort(lst):
+    i = 1
+    while i < len(lst):
+        j = i
+        while j > 0 and lst[j] < lst[j-1]:
+                lst[i], lst[j-1] = lst[j-1], lst[i]
+                j -= 1
+        i += 1
 
 '''
 O(2^n): Exponential time
+- algorithms that grows exponentially with the input size
+- patterns: typical in algorithms that solve problems by brute force
+i.e., recursive algorithms for fibonacci sequence
+
+NOTE: 
+Characteristics of burte force:
+- Exhaustive search: checks all possibilities
+- No pruning: does not skip obviously bad solutions
+- Naive: most straightforward method
+- Complete enumeration: generate/test all combination
 '''
+def fibonacci(n):
+    if n <= 1:
+        return n
+    return fibonacci(n-1) + fibonacci(n-2)
 
 '''
 O(n!): Factorial time
+- algorithms that grows factorial time with the input size
+- patterns: generate all possible arrangements/orderings of n items using backtracking
+
+i.e., agorithms that generate all permutations of a string
 '''
+def permute(str, left, right, res):
+    if left == right:
+        res.append(str)
+    else:
+        for i in range(left, right+1):
+            str = swap(str, left, i)
+            permute(str, left+1, right, res)
+            str = swap(str, left, i)
+        
+
+def swap(str, i, j):
+    '''
+    objects are always passed by reference. 
+    - if an object is mutable, then any changes to the object is reflected outside the function scope
+    - if an object is immutable, it cannot be modified. To get 'reflective' changes, create a new object and reassign the variable outside the function scope
+    '''
+    if i == j:
+        return str
+    elif i > j:
+        i, j = j, i
+    return str[:i] + str[j] + str[i+1:j] + str[i] + str[j+1:]
 
 if __name__ == "__main__":
     ls = [1,2,3,5,8,9,14]
@@ -166,3 +223,12 @@ if __name__ == "__main__":
     assert sorted_ls_2 == sorted(prev_ls_2)
 
     quick_sort(ls_descending, 0, len(ls_descending)-1)
+
+    str = "ABCDEF"
+
+    str = swap(str, 1, 1)
+
+    res = []
+    str = permute(str, 0, len(str)-1, res)
+
+    print(res, len(res))
