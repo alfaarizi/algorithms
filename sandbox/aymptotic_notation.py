@@ -225,36 +225,99 @@ def swap(str, i, j):
         i, j = j, i
     return str[:i] + str[j] + str[i+1:j] + str[i] + str[j+1:]
 
-if __name__ == "__main__":
-    ls = [1,2,3,5,8,9,14]
-    ls_2 = [8,2,1,6,7]
-    ls_descending = [3,5,4,7]
-    ls_empty = []
-    assert binary_search(ls, 9) == 5
-
-    assert find_max(ls_2) == 8
-
-    # original arr
-    prev_ls_2 = ls_2[:]
-
-    ls_2 = merge_sort(ls_2)
-    assert ls_2 == sorted(prev_ls_2)
-
-    ls_2 = prev_ls_2[:]
-    insertion_sort(ls_2)
-    assert ls_2 == sorted(prev_ls_2)
-
-    merged_lst = merge([2,8], [1,6,7])
+def time_algorithms():
+    import timeit
     
-    prev_ls_2 = ls_2[:]
-    sorted_ls_2 = merge_sort(ls_2)
-    assert sorted_ls_2 == sorted(prev_ls_2)
+    ls = [64, 34, 25, 12, 22, 11, 90, 88, 76, 50, 30]
 
-    quick_sort(ls_descending, 0, len(ls_descending)-1)
+    all_time = {}
 
-    str = "ABCDEF"
+    shared = {
+        **globals(),
+        'ls':ls
+    }
 
-    str = swap(str, 1, 1)
+    # Binary Search (need sorted list)
+    t = timeit.timeit('binary_search(ls, 50)', globals=shared, number=100_000)
+    all_time.update({'binary_search': t})
 
-    res = []
-    str = permute(str, 0, len(str)-1, res)
+    # Find Max
+    t = timeit.timeit('find_max(ls)', globals=shared, number=100_000)
+    all_time.update({'find_max': t})
+
+    # Merge Sort
+    t = timeit.timeit('merge_sort(ls[:])', globals=shared, number=10_000)
+    all_time.update({'merge_sort': t})
+    
+    # Insertion Sort
+    t = timeit.timeit('insertion_sort(ls[:])', globals=shared, number=10_000)
+    all_time.update({'insertion_sort': t})
+    
+    # Quick Sort
+    t = timeit.timeit('temp = ls[:]; quick_sort(temp, 0, len(temp)-1)', globals=shared, number=10_000)
+    all_time.update({'quick_sort': t})
+
+    # Merge Arrays
+    t = timeit.timeit('merge([25, 50, 76], [12, 34, 88])', globals=shared, number=100_000)
+    all_time.update({'merge': t})
+    
+    # String Swap
+    t = timeit.timeit('swap("ALGORITHM", 1, 4)', globals=shared, number=100_000)
+    all_time.update({'swap': t})
+    
+    # Permutations (using smaller string)
+    t = timeit.timeit('res = []; permute("ABCD", 0, 3, res)', globals=shared, number=100)
+    all_time.update({'permute': t})
+
+    '''
+    {
+        "binary_search": 0.030827000009594485,
+        "find_max": 0.03251908300444484,
+        "merge_sort": 0.0510970419854857,
+        "insertion_sort": 0.02584241598378867,
+        "quick_sort": 0.03485125000588596,
+        "merge": 0.05001924998941831,
+        "swap": 0.022615583991864696,
+        "permute": 0.0013292919902596623
+    }
+    '''
+
+    import json
+    print(json.dumps(all_time, indent=3))
+
+if __name__ == "__main__":
+
+    time_algorithms()
+
+    # ls = [1,2,3,5,8,9,14]
+    # ls_2 = [8,2,1,6,7]
+    # ls_descending = [3,5,4,7]
+    # ls_empty = []
+    # assert binary_search(ls, 9) == 5
+
+    # assert find_max(ls_2) == 8
+
+    # # original arr
+    # prev_ls_2 = ls_2[:]
+
+    # ls_2 = merge_sort(ls_2)
+    # assert ls_2 == sorted(prev_ls_2)
+
+    # ls_2 = prev_ls_2[:]
+    # insertion_sort(ls_2)
+    # assert ls_2 == sorted(prev_ls_2)
+
+    # merged_lst = merge([2,8], [1,6,7])
+    
+    # prev_ls_2 = ls_2[:]
+    # sorted_ls_2 = merge_sort(ls_2)
+    # assert sorted_ls_2 == sorted(prev_ls_2)
+
+    # quick_sort(ls_descending, 0, len(ls_descending)-1)
+
+    # str = "ABCDEF"
+
+    # str = swap(str, 1, 1)
+
+    # res = []
+    # str = permute(str, 0, len(str)-1, res)
