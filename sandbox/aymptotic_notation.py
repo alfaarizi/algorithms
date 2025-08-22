@@ -30,7 +30,10 @@ Theta Notation
 '''
 O(1): Constant time
 - algorithm that takes a constant time (to complete) regardless of the input size
-- pattern: direct accesss/calculation
+- pattern: 
+    - direct access,
+    - simple arithmetic, OR
+    - fixed number of operations
 i.e., acccesssing element in an array
 '''
 def get_elem(ls, i):
@@ -39,8 +42,10 @@ def get_elem(ls, i):
 '''
 O(log n): Logarithmic time
 - algorithm that grows logarithmatically with the input size
-- pattern: it cuts the problem size in half at each iteration, then does O(1) operations
-i.e., binary search in a sorted array
+- pattern: 
+    - repeatedly reduces problem size by a constant factor (usually half), OR
+    - navigate tree structures of height log n
+i.e., binary search in a sorted array, tree traveral of specific depth
 '''
 def binary_search(sorted_ls, target):
     """
@@ -48,7 +53,7 @@ def binary_search(sorted_ls, target):
     """
     # (left+right)/2 = left/2 + right/2 = right/2 - left/2 + left = left + (right-left)/2 => prevents integer overflow
     left, right = 0, len(sorted_ls)-1
-    while left < right:
+    while left <= right:
         mid = left + (right-left)//2
         if sorted_ls[mid] == target:
             return mid
@@ -61,7 +66,9 @@ def binary_search(sorted_ls, target):
 '''
 O(n): Linear time
 - algorithm that grows linearly with the input size
-- patterns: single loop through data, visiting each element once
+- patterns: 
+    - single pass through data, visiting each element exactly once
+NOTE: "pass" means going through the data structure from beginning to end
 i.e., finding the maximum element in an array
 '''
 def find_max(ls):
@@ -77,8 +84,10 @@ def find_max(ls):
 '''
 O(n log n): Log-linear time
 - algorithms that grows significantly faster than linear but much slower than quadratic with the input size
-- patterns: it cuts the problem size in half at each iteration, then does O(n) operations
-- i.e., sorting algorithms like merge sort and quick sort
+- patterns: 
+    - divide-and-conquer with O(n) work at each step, OR
+    - perform O(log n) operation for each n elements
+- i.e., sorting algorithms like merge sort, heap sort, and quick sort (average)
 '''
 def merge_sort(arr):
     if len(arr) <= 1:
@@ -136,7 +145,9 @@ def partition(arr, low, high):
 '''
 O(n^2): Quadratic time
 - algorithm that grows quadratically with the input size
-- patterns: nested loops that both depend on input size
+- patterns:
+    - nested loops that both depend on input size, OR
+    - compare every pair of elements
 i.e., bubble sort and insertion sort
 '''
 def bubble_sort(lst):
@@ -151,18 +162,25 @@ def insertion_sort(lst):
     while i < len(lst):
         j = i
         while j > 0 and lst[j] < lst[j-1]:
-                lst[i], lst[j-1] = lst[j-1], lst[i]
+                lst[j], lst[j-1] = lst[j-1], lst[j]
                 j -= 1
         i += 1
 
 '''
 O(2^n): Exponential time
 - algorithms that grows exponentially with the input size
-- patterns: typical in algorithms that solve problems by brute force
+- patterns: 
+    - generate all possible subsets/combination,
+    - make binary choices at each step
+    - recursive algorithms that branch into 2 calls without memoization
 i.e., recursive algorithms for fibonacci sequence
 
 NOTE: 
-Characteristics of burte force:
+1. Memoization is an optimization technique that stores the results of a function call in a cache,
+then returns the cached result when the function is called with the same parameters again
+
+2. Brute force is a problem-solving aproach that tries every possible solution until it finds the right one. 
+The key characteristics are:
 - Exhaustive search: checks all possibilities
 - No pruning: does not skip obviously bad solutions
 - Naive: most straightforward method
@@ -176,8 +194,13 @@ def fibonacci(n):
 '''
 O(n!): Factorial time
 - algorithms that grows factorial time with the input size
-- patterns: generate all possible arrangements/orderings of n items using backtracking
+- patterns: 
+    - generate all possible arrangements/orderings of n items, typically using backtracking
 
+NOTE: 
+1. backtracking is an algorithm that explores all possible solutions by making choices, and 
+when a choice leads to a dead end or you've fully explored that path, you "undo" the choice and
+try the next option
 i.e., agorithms that generate all permutations of a string
 '''
 def permute(str, left, right, res):
@@ -209,12 +232,17 @@ if __name__ == "__main__":
     ls_empty = []
     assert binary_search(ls, 9) == 5
 
-    assert find_max(ls) == 14
+    assert find_max(ls_2) == 8
 
-    prev_ls = ls[:]
-    merge_sort(ls)
+    # original arr
+    prev_ls_2 = ls_2[:]
 
-    assert ls == sorted(prev_ls)
+    ls_2 = merge_sort(ls_2)
+    assert ls_2 == sorted(prev_ls_2)
+
+    ls_2 = prev_ls_2[:]
+    insertion_sort(ls_2)
+    assert ls_2 == sorted(prev_ls_2)
 
     merged_lst = merge([2,8], [1,6,7])
     
@@ -230,5 +258,3 @@ if __name__ == "__main__":
 
     res = []
     str = permute(str, 0, len(str)-1, res)
-
-    print(res, len(res))
