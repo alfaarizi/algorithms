@@ -171,7 +171,7 @@ O(2^n): Exponential time
 - algorithms that grows exponentially with the input size
 - patterns: 
     - generate all possible subsets/combination,
-    - make binary choices at each step
+    - make binary choices at each step AND explore all possibilities
     - recursive algorithms that branch into 2 calls without memoization
 i.e., recursive algorithms for fibonacci sequence
 
