@@ -138,8 +138,10 @@ def partition(arr, low, high):
         while arr[j] > pivot:
             j-=1
         if i >= j:
-            return j
+            break
         arr[i], arr[j] = arr[j], arr[i]
+    arr[low], arr[j] = arr[j], arr[low]
+    return j
 
 
 '''
@@ -148,9 +150,9 @@ O(n^2): Quadratic time
 - patterns:
     - nested loops that both depend on input size, OR
     - compare every pair of elements
-i.e., bubble sort and insertion sort
+i.e., bubble sort, selection sort, and insertion sort
 '''
-def bubble_sort(lst):
+def selection_sort(lst):
     n = len(lst)
     for i in range(n):
         for j in range(i+1, n):
